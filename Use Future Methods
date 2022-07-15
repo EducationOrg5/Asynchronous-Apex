@@ -26,8 +26,8 @@ public static AccountProcessorTest {
     insert A;
 
     Contact Con = new Contact();
-    Con.FirstName = 'Binary';
-    Con.LastName = 'Programming';
+    Con.FirstName = 'Education';
+    Con.LastName = 'Org';
     Con.AccountId = A.Id;
 
     insert Con;
