@@ -1,0 +1,45 @@
+-----------------------------------------------AccountProcessor Class---------------------------------------------
+public class AccountProcessor {
+
+  @future
+  public static void countContacts(List<Id> accountIds){
+
+    List<Account> AccList = [Select Id , Number_Of_Contacts__c , (Select Id from Contacts) from Account where Id in : accountIds];
+
+    for(Account Acc : AccList){
+
+      Acc.Number_Of_Contacts__c = Acc.Contacts.size();
+    }
+    update AccList;
+  }
+}
+
+-----------------------------------------------AccountProcessorTest TestClass----------------------------------------
+
+@isTest
+public static AccountProcessorTest {
+
+  public static testmethod void testAccountProcessor(){
+
+    Account A = new Account();
+    A.Name = 'Test Account';
+    insert A;
+
+    Contact Con = new Contact();
+    Con.FirstName = 'Binary';
+    Con.LastName = 'Programming';
+    Con.AccountId = A.Id;
+
+    insert Con;
+
+    List<Id> AccListId = new List<Id>();
+    AccListId.add(A.Id);
+
+    Test.startTest();
+    AccountProcessor.countContacts(AccListId);
+    Test.stopTest();
+
+    Account Acc = [Select Number_Of_Contacts__c from Account where id =: A.Id];
+    System.assertEquals(Integer.valueOf(Acc.Number_Of_Contacts__c),1);    
+      }
+}
